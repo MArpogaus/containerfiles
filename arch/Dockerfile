@@ -1,5 +1,8 @@
 FROM greyltc/archlinux-aur:yay
 
+LABEL com.github.containers.toolbox="true" \
+      usage="This image is meant to be used with the toolbox or distrobox command"
+
 RUN curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=US' | sed 's:#Server:Server:' | grep -v '^#' | head -n 25 > /tmp/mirrorlist \
     && rankmirrors -n 5 /tmp/mirrorlist | tee /etc/pacman.d/mirrorlist
 

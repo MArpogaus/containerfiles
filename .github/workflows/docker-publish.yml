@@ -54,7 +54,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ matrix.dir }}
+          images: ${{ env.REGISTRY }}/${GITHUB_REPOSITORY_OWNER}/${{ matrix.dir }}
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6

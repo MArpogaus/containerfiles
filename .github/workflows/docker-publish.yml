@@ -14,8 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
+  REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
@@ -54,7 +53,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${GITHUB_REPOSITORY_OWNER}/${{ matrix.dir }}
+          images: ${{ env.REGISTRY }}/${{ matrix.dir }}
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6

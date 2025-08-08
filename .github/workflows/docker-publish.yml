@@ -79,7 +79,7 @@ jobs:
       - name: Sign container image
         if: github.event_name != 'pull_request'
         run: |
-          cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY ${{ steps.meta.outputs.tags }}@${{ steps.push.outputs.digest }}
+          cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY ${{ env.REGISTRY }}/${{ matrix.dir }}:${{ github.ref_name }}@${{ steps.push.outputs.digest }}
         env:
           TAGS: ${{ steps.push.outputs.digest }}
           COSIGN_EXPERIMENTAL: false

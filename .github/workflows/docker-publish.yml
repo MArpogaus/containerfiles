@@ -56,8 +56,8 @@ jobs:
         uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
         with:
           context: ${{ matrix.dir }}
+          image: ${{ matrix.dir }}
           platforms: ${{ matrix.platform }}
-          image: ${{ matrix.containerfile }}
           tags: ${{ env.IMAGE_TAGS }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: true

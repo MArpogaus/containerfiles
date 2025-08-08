@@ -1,0 +1,150 @@
+# Inspired by: https://github.com/othneildrew/Best-README-Template
+#+OPTIONS: toc:nil
+
+[[https://github.com/marpogaus/containerfiles/graphs/contributors][https://img.shields.io/github/contributors/marpogaus/containerfiles.svg?style=flat-square]]
+[[https://github.com/marpogaus/containerfiles/network/members][https://img.shields.io/github/forks/marpogaus/containerfiles.svg?style=flat-square]]
+[[https://github.com/marpogaus/containerfiles/stargazers][https://img.shields.io/github/stars/marpogaus/containerfiles.svg?style=flat-square]]
+[[https://github.com/marpogaus/containerfiles/issues][https://img.shields.io/github/issues/marpogaus/containerfiles.svg?style=flat-square]]
+[[https://github.com/marpogaus/containerfiles/blob/main/LICENSE][https://img.shields.io/github/license/marpogaus/containerfiles.svg?style=flat-square]]
+[[https://github.com/marpogaus/containerfiles/actions/workflows/docker-publish.yml][https://img.shields.io/github/actions/workflow/status/marpogaus/containerfiles/docker-publish.yml.svg?label=build&style=flat-square]]
+[[https://github.com/marpogaus/containerfiles/blob/main/.pre-commit-config.yaml][https://img.shields.io/badge/pre--commit-enabled-brightgreen.svg?logo=pre-commit&style=flat-square]]
+[[https://linkedin.com/in/marpogaus][https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555]]
+
+* My Containerfiles
+
+#+TOC: headlines 2 local
+
+** About The Project
+
+This repository contains containerfiles for building signed container images optimized for use with [[https://github.com/89luca89/distrobox][distrobox]] and [[https://github.com/containers/toolbox][toolbox]].
+The containers are cryptographically signed for enhanced security and can be safely used on security-enhanced systems like [[https://secureblue.dev/][secureblue]].
+
+Inspired by [[https://github.com/ublue-os/boxkit][ublue-os/boxkit]], this project provides a streamlined approach to creating and maintaining custom container images with proper signing infrastructure.
+
+*** Currently Available Images
+
+- *arch*: Arch Linux container with development tools including Emacs, LaTeX, and various CLI utilities
+
+** Getting Started
+
+This project provides both pre-built signed images and a framework for creating your own custom signed containers.
+
+*** Prerequisites
+
+- [[https://podman.io/][Podman]] or [[https://www.docker.com/][Docker]]
+- [[https://github.com/89luca89/distrobox][Distrobox]] or [[https://github.com/containers/toolbox][Toolbox]]
+
+*** Using Pre-built Images
+
+**** For Regular Container Hosts
+
+#+begin_src bash
+# Using distrobox
+distrobox create --image ghcr.io/marpogaus/arch:latest --name arch-dev
+
+# Using toolbox
+toolbox create --image ghcr.io/marpogaus/arch:latest arch-dev
+#+end_src
+
+**** For secureblue and Other Security-Enhanced Systems
+
+If you're running [[https://secureblue.dev/][secureblue]] or similar security-enhanced distributions that enforce container signing policies, you'll need to configure your system to trust the container signatures.
+
+1. Create a registry configuration file:
+   #+begin_src bash
+     mkdir -p $HOME/.config/containers/registries.d
+     cat > $HOME/.config/containers/registries.d/ghcr.io-marpogaus.yaml << EOF
+      docker:
+        ghcr.io/marpogaus:
+          use-sigstore-attachments: true
+      EOF
+   #+end_src
+
+2. Update your container policy to allow signed images from this repository:
+   #+begin_src bash
+   # Backup existing policy
+   cp /etc/containers/policy.json $HOME/.config/containers/policy.json.bak
+   
+   jq '.transports.docker["ghcr.io/marpogaus"] = [{"type": "sigstoreSigned", "keyPath": "/etc/pki/containers/marpogaus-cosign.pub", "signedIdentity": {"type": "matchRepository"}}]' $HOME/.config/containers/policy.json.bak > $HOME/.config/containers/policy.json
+   #+end_src
+
+3. Download and install the public key:
+   #+begin_src bash
+   # Create directory for custom keys
+   sudo mkdir -p $HOME/.config/pki/containers
+   
+   # Download the public key
+   curl -o cosign.pub https://raw.githubusercontent.com/marpogaus/containerfiles/main/cosign.pub
+   
+   # Install the key
+   sudo cp cosign.pub $HOME/.config/pki/containers/marpogaus-cosign.pub
+   #+end_src
+
+For rootful Containers container access, you'll need to modify the system policy directly.
+
+*** Creating Your Own Images
+
+To fork this repository and create your own signed container images:
+
+1. *Fork this repository* to your GitHub account
+
+2. *Add your containerfiles* to the repository:
+   - Create directories for each image (e.g., =myimage=)
+   - Add =Dockerfile= to each directory
+   - Ensure your Dockerfile includes the toolbox/distrobox label:
+     #+begin_src dockerfile
+     LABEL com.github.containers.toolbox="true" \
+           usage="This image is meant to be used with the toolbox or distrobox command"
+     #+end_src
+
+3. *Update the build matrix* in =.github/workflows/docker-publish.yml=:
+   #+begin_src yaml
+   strategy:
+     matrix:
+       dir:
+         - arch           # existing image
+         - myimage        # your new image
+         - anothername    # another image
+   #+end_src
+
+4. *Set up container signing* (highly recommended):
+
+   a. Install [[https://docs.sigstore.dev/cosign/installation/][cosign]] locally:
+
+   b. Generate signing keys:
+      #+begin_src bash
+      cosign generate-key-pair
+      # Press Enter when asked for password (leave empty)
+      #+end_src
+
+   c. Add the private key to GitHub secrets:
+      - Go to your repository Settings → Security → Secrets and variables → Actions
+      - Create a new secret named =SIGNING_SECRET=
+      - Copy the contents of =cosign.key= into the secret value
+      - *Never share or commit the =cosign.key= file*
+
+   d. Replace the public key in the repo with your new one .
+
+5. *Push your changes* and GitHub Actions will automatically build and sign your images
+
+** Contributing
+
+Any contributions are greatly appreciated! If you have a question, an issue or would like to contribute, please read our [[file:CONTRIBUTING.md][contributing guidelines]].
+
+** License
+
+Distributed under the [[file:LICENSE][MIT License]] (TODO: Update license type as needed)
+
+** Contact
+
+[[https://github.com/marpogaus/][Marcel Arpogaus]] - [[mailto:znepry.necbtnhf@tznvy.pbz][znepry.necbtnhf@tznvy.pbz]] (encrypted with [[https://rot13.com/][ROT13]])
+
+Project Link: [[https://github.com/marpogaus/containerfiles]]
+
+** Acknowledgments
+
+- [[https://github.com/ublue-os/boxkit][ublue-os/boxkit]] - Inspiration and foundation for this project
+- [[https://secureblue.dev/][secureblue]] - Security-enhanced Linux distribution
+- [[https://github.com/89luca89/distrobox][distrobox]] - Container-based development environments
+- [[https://github.com/containers/toolbox][toolbox]] - Container-based development and debugging
+- [[https://docs.sigstore.dev/][Sigstore]] - Container signing infrastructure

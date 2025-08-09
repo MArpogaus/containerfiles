@@ -57,7 +57,6 @@ jobs:
         with:
           containerfiles: Dockerfile
           context: ${{ matrix.dir }}
-          image: ${{ matrix.dir }}
           platforms: ${{ matrix.platform }}
           tags: ${{ env.IMAGE_TAGS }}
           labels: ${{ steps.meta.outputs.labels }}

@@ -1,6 +1,9 @@
 FROM greyltc/archlinux-aur:yay
 
-RUN curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on' | head -n 26 | sed 's:#Server:Server:' > /tmp/mirrorlist \
+LABEL com.github.containers.toolbox="true" \
+      usage="This image is meant to be used with the toolbox or distrobox command"
+
+RUN curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=US' | sed 's:#Server:Server:' | grep -v '^#' | head -n 25 > /tmp/mirrorlist \
     && rankmirrors -n 5 /tmp/mirrorlist | tee /etc/pacman.d/mirrorlist
 
 RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen \
@@ -9,26 +12,30 @@ RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen \
 
 RUN pacman -Syyu --noconfirm \
     && pacman -S --noconfirm \
+    bash-language-server \
     bat \
     biber \
     cmake \
-    emacs-nativecomp \
+    ctags \
+    direnv \
+    emacs-wayland \
+    enchant \
     fd \
     fzf \
     git \
     git-delta \
-    gpa \
     graphviz \
     htop \
     hunspell \
     hunspell-de \
     hunspell-en_us \
     imagemagick \
-    jre-openjdk \
     libnotify \
     libpulse \
+    luarocks \
     openssh \
     pandoc \
+    parallel \
     pdf2svg \
     perl-clone \
     perl-file-homedir \
@@ -38,12 +45,24 @@ RUN pacman -Syyu --noconfirm \
     shellcheck \
     shfmt \
     stow \
+    texlive-basic \
+    texlive-bibtexextra \
+    texlive-binextra \
+    texlive-fontsextra \
+    texlive-fontsrecommended \
+    texlive-langgerman \
+    texlive-latex \
+    texlive-latexextra \
+    texlive-latexrecommended \
+    texlive-luatex \
+    texlive-mathscience \
+    texlive-pictures \
+    texlive-plaingeneric \
+    texlive-publishers \
     tmux \
     tree \
+    unzip \
     vim \
-    watchexec \
-    zathura-pdf-poppler && \
-    pacman -Scc --noconfirm
-
-RUN aur-install tllocalmgr-git && \
+    zathura-pdf-poppler \
+    zip && \
     pacman -Scc --noconfirm

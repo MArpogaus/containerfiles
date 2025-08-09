@@ -55,7 +55,7 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          containerfiles: containerfiles/${{ matrix.dir }}/Dockerfile
+          containerfiles: ${{ matrix.dir }}/Dockerfile
           context: ${{ matrix.dir }}
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}

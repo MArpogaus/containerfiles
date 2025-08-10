@@ -41,4 +41,4 @@ restorecon -rv \
 
 # Enable the authselect profile feature and the systemd service
 authselect enable-feature with-systemd-homed
-sudo systemctl enable systemd-homed
+systemctl enable systemd-homed

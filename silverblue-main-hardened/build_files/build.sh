@@ -1,6 +1,11 @@
 #!/bin/bash
 set -ouex pipefail
 
+### Notes
+# https://blue-build.org/blog/preferring-system-etc
+# /etc/ files in the image are copied to /usr/etc/ during deployment.
+# At run-time the /usr/etc/ directory then contains the original configuration of the image.
+
 ### Install packages
 dnf5 install -y zsh
 
@@ -8,17 +13,17 @@ dnf5 install -y zsh
 cd /tmp
 
 # Create a registry configuration file:
-cat > /usr/etc/containers/registries.d/ghcr.io-marpogaus.yaml << EOF
+cat > /etc/containers/registries.d/ghcr.io-marpogaus.yaml << EOF
 docker:
   ghcr.io/marpogaus:
     use-sigstore-attachments: true
 EOF
 
 # Download and install the public key:
-curl -o /usr/etc/pki/containers/marpogaus-cosign.pub https://raw.githubusercontent.com/marpogaus/containerfiles/main/cosign.pub
+curl -o /etc/pki/containers/marpogaus-cosign.pub https://raw.githubusercontent.com/marpogaus/containerfiles/main/cosign.pub
 
 # Update container policy to allow signed images from this repository
-POLICY_FILE="/usr/etc/containers/policy.json"
+POLICY_FILE="/etc/containers/policy.json"
 
 jq --arg image_registry "ghcr.io/marpogaus" \
    --arg image_registry_key "marpogaus-cosign" \
@@ -26,14 +31,13 @@ jq --arg image_registry "ghcr.io/marpogaus" \
     { $image_registry: [
         {
             "type": "sigstoreSigned",
-            "keyPath": ("/usr/etc/pki/containers/" + $image_registry_key + ".pub"),
+            "keyPath": ("/etc/pki/containers/" + $image_registry_key + ".pub"),
             "signedIdentity": {
                 "type": "matchRepository"
             }
         }
     ] } + .' "${POLICY_FILE}" > POLICY.tmp
 
-cp POLICY.tmp /usr/etc/containers/policy.json
 cp POLICY.tmp /etc/containers/policy.json
 rm POLICY.tmp
 

@@ -133,7 +133,7 @@ Any contributions are greatly appreciated! If you have a question, an issue or w
 
 ** License
 
-Distributed under the [[file:LICENSE][MIT License]] (TODO: Update license type as needed)
+Distributed under the [[file:LICENSE][Apache License 2.0]].
 
 ** Contact
 

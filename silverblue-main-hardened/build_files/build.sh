@@ -42,3 +42,6 @@ restorecon -rv \
 # Enable the authselect profile feature and the systemd service
 authselect enable-feature with-systemd-homed
 systemctl enable systemd-homed
+
+### Clean dnf caches
+dnf clean all

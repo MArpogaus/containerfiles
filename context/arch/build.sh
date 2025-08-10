@@ -63,5 +63,4 @@ pacman -Syyu --noconfirm \
     vim \
     zathura-pdf-poppler \
     zip && \
-    pacman -Scc --noconfirm \
-    rm -rf /var/cache/pacman/pkg/*
+    pacman -Scc --noconfirm

@@ -29,7 +29,7 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        dir:
+        containerfile:
           - arch
           - silverblue-main-hardened
         platform:
@@ -45,7 +45,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ matrix.dir }}
+          images: ${{ env.REGISTRY }}/${{ matrix.containerfile }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -56,8 +56,8 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          containerfiles: ${{ matrix.dir }}/Containerfile
-          context: ${{ matrix.dir }}
+          containerfiles: ./containerfiles/${{ matrix.containerfile }}.containerfile
+          context: ./context
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -97,7 +97,7 @@ jobs:
       - name: Sign container image
         if: github.event_name != 'pull_request'
         run: |
-          cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ matrix.dir }}:${{ github.ref_name }}@${{ steps.push.outputs.digest }}
+          cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ matrix.containerfile }}:${{ github.ref_name }}@${{ steps.push.outputs.digest }}
         env:
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}

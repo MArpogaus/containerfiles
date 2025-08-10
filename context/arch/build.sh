@@ -1,16 +1,14 @@
-FROM greyltc/archlinux-aur:yay
+#!/bin/bash
+set -ouex pipefail
 
-LABEL com.github.containers.toolbox="true" \
-      usage="This image is meant to be used with the toolbox or distrobox command"
-
-RUN curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=US' | sed 's:#Server:Server:' | grep -v '^#' | head -n 25 > /tmp/mirrorlist \
+curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=US' | sed 's:#Server:Server:' | grep -v '^#' | head -n 25 > /tmp/mirrorlist \
     && rankmirrors -n 5 /tmp/mirrorlist | tee /etc/pacman.d/mirrorlist
 
-RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen \
+echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen \
     && echo LANG=en_US.UTF-8 > /etc/locale.conf \
     && locale-gen
 
-RUN pacman -Syyu --noconfirm \
+pacman -Syyu --noconfirm \
     && pacman -S --noconfirm \
     bash-language-server \
     bat \
@@ -65,4 +63,5 @@ RUN pacman -Syyu --noconfirm \
     vim \
     zathura-pdf-poppler \
     zip && \
-    pacman -Scc --noconfirm
+    pacman -Scc --noconfirm \
+    rm -rf /var/cache/pacman/pkg/*

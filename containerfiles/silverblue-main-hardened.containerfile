@@ -1,7 +1,7 @@
 # ref: https://github.com/ublue-os/image-template/blob/main/Containerfile
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
-COPY build_files /
+COPY silverblue-main-hardened /
 
 # Base Image
 FROM ghcr.io/secureblue/silverblue-main-hardened:latest

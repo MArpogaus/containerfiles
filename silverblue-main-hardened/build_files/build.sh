@@ -27,6 +27,10 @@ cd $TMP_DIR
 make -f /usr/share/selinux/devel/Makefile homed.pp
 semodule --install=homed.pp
 
+# Add public key
+mkdir -p /var/lib/systemd/home/
+cp /ctx/local.public /var/lib/systemd/home/
+
 # Set file context
 restorecon -rv \
     /usr/lib/systemd/systemd-homed \
@@ -34,9 +38,6 @@ restorecon -rv \
     /usr/lib/systemd/system/systemd-homed.service \
     /usr/lib/systemd/system/systemd-homed-activate.service \
     /var/lib/systemd/home
-
-# Add public key
-cp /ctx/local.public /var/lib/systemd/home/
 
 # Enable the authselect profile feature and the systemd service
 authselect enable-feature with-systemd-homed

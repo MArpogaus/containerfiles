@@ -39,7 +39,7 @@ rm POLICY.tmp
 
 ### Add custom distrobox config
 cd /tmp
-cat > /usr/etc/etc/distrobox/distrobox.ini << EOF
+cat > /usr/etc/distrobox/distrobox.ini << EOF
 # My custom images
 [my-arch]
 image=ghcr.io/marpogaus/arch

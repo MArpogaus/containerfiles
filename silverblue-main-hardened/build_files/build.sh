@@ -37,6 +37,17 @@ cp POLICY.tmp /usr/etc/containers/policy.json
 cp POLICY.tmp /etc/containers/policy.json
 rm POLICY.tmp
 
+### Add custom distrobox config
+cd /tmp
+cat > /usr/etc/etc/distrobox/distrobox.ini << EOF
+# My custom images
+[my-arch]
+image=ghcr.io/marpogaus/arch
+nvidia=true
+pull=true
+pre-init-hooks="curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=DE' | sed 's:#Server:Server:' | grep -v '^#' | head -n 40 | tee /mirrorlist && rankmirrors -pn 5 /mirrorlist | tee /etc/pacman.d/mirrorlist"
+EOF
+
 ### Enable systemd-homed
 # Build and install SELinux custom policy
 TMP_DIR=/tmp/homed-selinux

@@ -31,6 +31,7 @@ jobs:
       matrix:
         dir:
           - arch
+          - silverblue-main-hardened
         platform:
           - linux/amd64
           # - linux/arm/v6
@@ -55,7 +56,7 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          containerfiles: ${{ matrix.dir }}/Dockerfile
+          containerfiles: ${{ matrix.dir }}/Containerfile
           context: ${{ matrix.dir }}
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}

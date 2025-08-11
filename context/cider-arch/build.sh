@@ -15,5 +15,5 @@ Server = https://repo.cider.sh/arch
 EOF
 
 pacman -Syyu --noconfirm
-pacman -S --noconfirm cider
+pacman -S --noconfirm cider pipewire-pulse
 pacman -Scc --noconfirm

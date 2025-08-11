@@ -31,6 +31,7 @@ jobs:
       matrix:
         containerfile:
           - arch
+          - cider-arch
           - emacs-arch
           - latex-arch
           - silverblue-main-hardened

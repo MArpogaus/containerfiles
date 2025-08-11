@@ -32,6 +32,7 @@ jobs:
         containerfile:
           - arch
           - emacs-arch
+          - latex-arch
           - silverblue-main-hardened
         platform:
           - linux/amd64

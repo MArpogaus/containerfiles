@@ -54,7 +54,7 @@ for d in cider-arch emacs-arch latex-arch; do
 image=ghcr.io/marpogaus/$d
 pull=true
 replace=true
-pre-init-hooks="update-mirrors DE"
+pre_init_hooks="update-mirrors DE"
 EOF
 done
 

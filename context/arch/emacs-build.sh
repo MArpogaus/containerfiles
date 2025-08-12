@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ouex pipefail
 
-cp update-mirrors /usr/bin/
+cp /ctx/update-mirrors /usr/bin/
 update-mirrors US
 
 pacman -Syyu --noconfirm

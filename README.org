@@ -21,10 +21,6 @@ The containers are cryptographically signed for enhanced security and can be saf
 
 Inspired by [[https://github.com/ublue-os/boxkit][ublue-os/boxkit]], this project provides a streamlined approach to creating and maintaining custom container images with proper signing infrastructure.
 
-*** Currently Available Images
-
-- *arch*: Arch Linux container with development tools including Emacs, LaTeX, and various CLI utilities
-
 ** Getting Started
 
 This project provides both pre-built signed images and a framework for creating your own custom signed containers.
@@ -101,8 +97,8 @@ To fork this repository and create your own signed container images:
    #+begin_src yaml
    strategy:
      matrix:
-       dir:
-         - arch           # existing image
+       containerfile:
+         - ...            # existing images
          - myimage        # your new image
          - anothername    # another image
    #+end_src

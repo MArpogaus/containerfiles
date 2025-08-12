@@ -13,7 +13,7 @@ dnf5 install -y zsh
 cd /tmp
 
 # Create a registry configuration file:
-cat > /etc/containers/registries.d/ghcr.io-marpogaus.yaml << EOF
+cat >/etc/containers/registries.d/ghcr.io-marpogaus.yaml <<EOF
 docker:
   ghcr.io/marpogaus:
     use-sigstore-attachments: true
@@ -27,7 +27,7 @@ POLICY_FILE="/etc/containers/policy.json"
 
 jq --arg image_registry "ghcr.io/marpogaus" \
    --arg image_registry_key "marpogaus-cosign" \
-   '.transports.docker |= 
+   '.transports.docker |=
     { $image_registry: [
         {
             "type": "sigstoreSigned",
@@ -36,21 +36,28 @@ jq --arg image_registry "ghcr.io/marpogaus" \
                 "type": "matchRepository"
             }
         }
-    ] } + .' "${POLICY_FILE}" > POLICY.tmp
+    ] } + .' "${POLICY_FILE}" >POLICY.tmp
 
 cp POLICY.tmp /etc/containers/policy.json
 rm POLICY.tmp
 
 ### Add custom distrobox config
 cd /tmp
-tee >> /etc/distrobox/distrobox.ini << EOF
+tee >>/etc/distrobox/distrobox.ini <<EOF
+
 # My custom images
-[my-arch]
-image=ghcr.io/marpogaus/arch
-nvidia=true
-pull=true
-pre-init-hooks="curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=DE' | sed 's:#Server:Server:' | grep -v '^#' | head -n 40 | tee /mirrorlist && rankmirrors -pn 5 /mirrorlist | tee /etc/pacman.d/mirrorlist"
 EOF
+
+PRE_INIT_HOOK="curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=DE' | grep Server | tr -d '#' | tee /etc/pacman.d/mirrorlist"
+for d in cider-arch emacs-arch latex-arch; do
+        tee >>/etc/distrobox/distrobox.ini <<EOF
+[$d]
+image=ghcr.io/marpogaus/$d
+pull=true
+replace=true
+pre-init-hooks="$PRE_INIT_HOOK"
+EOF
+done
 
 ### Enable systemd-homed
 # Build and install SELinux custom policy
@@ -67,11 +74,11 @@ cp /ctx/local.public /var/lib/systemd/home/
 
 # Set file context
 restorecon -rv \
-    /usr/lib/systemd/systemd-homed \
-    /usr/lib/systemd/systemd-homework \
-    /usr/lib/systemd/system/systemd-homed.service \
-    /usr/lib/systemd/system/systemd-homed-activate.service \
-    /var/lib/systemd/home
+        /usr/lib/systemd/systemd-homed \
+        /usr/lib/systemd/systemd-homework \
+        /usr/lib/systemd/system/systemd-homed.service \
+        /usr/lib/systemd/system/systemd-homed-activate.service \
+        /var/lib/systemd/home
 
 # Enable the authselect profile feature and the systemd service
 authselect enable-feature with-systemd-homed

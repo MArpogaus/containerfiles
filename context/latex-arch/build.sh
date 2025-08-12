@@ -5,39 +5,7 @@ curl -s 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirro
 
 pacman -Syyu --noconfirm
 pacman -S --noconfirm \
-	bash-language-server \
-	bat \
 	biber \
-	cmake \
-	ctags \
-	direnv \
-	emacs-wayland \
-	enchant \
-	fd \
-	fzf \
-	git \
-	git-delta \
-	graphviz \
-	htop \
-	hunspell \
-	hunspell-de \
-	hunspell-en_us \
-	imagemagick \
-	libnotify \
-	libpulse \
-	luarocks \
-	openssh \
-	pandoc \
-	parallel \
-	pdf2svg \
-	perl-clone \
-	perl-file-homedir \
-	perl-yaml-tiny \
-	python3 \
-	ripgrep \
-	shellcheck \
-	shfmt \
-	stow \
 	texlive-basic \
 	texlive-bibtexextra \
 	texlive-binextra \
@@ -52,10 +20,6 @@ pacman -S --noconfirm \
 	texlive-pictures \
 	texlive-plaingeneric \
 	texlive-publishers \
-	tmux \
-	tree \
-	unzip \
-	vim \
 	zathura-pdf-poppler \
 	zip
 pacman -Scc --noconfirm

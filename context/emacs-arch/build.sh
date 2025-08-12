@@ -7,7 +7,6 @@ pacman -Syyu --noconfirm
 pacman -S --noconfirm \
 	bash-language-server \
 	bat \
-	biber \
 	cmake \
 	ctags \
 	direnv \
@@ -23,35 +22,12 @@ pacman -S --noconfirm \
 	hunspell-de \
 	hunspell-en_us \
 	imagemagick \
-	libnotify \
-	libpulse \
-	luarocks \
-	openssh \
 	pandoc \
 	parallel \
 	pdf2svg \
-	perl-clone \
-	perl-file-homedir \
-	perl-yaml-tiny \
-	python3 \
 	ripgrep \
 	shellcheck \
 	shfmt \
-	stow \
-	texlive-basic \
-	texlive-bibtexextra \
-	texlive-binextra \
-	texlive-fontsextra \
-	texlive-fontsrecommended \
-	texlive-langgerman \
-	texlive-latex \
-	texlive-latexextra \
-	texlive-latexrecommended \
-	texlive-luatex \
-	texlive-mathscience \
-	texlive-pictures \
-	texlive-plaingeneric \
-	texlive-publishers \
 	tmux \
 	tree \
 	unzip \

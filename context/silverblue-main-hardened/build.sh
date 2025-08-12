@@ -48,14 +48,13 @@ tee >>/etc/distrobox/distrobox.ini <<EOF
 # My custom images
 EOF
 
-PRE_INIT_HOOK="curl 'https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=DE' | grep Server | tr -d '#' | tee /etc/pacman.d/mirrorlist"
 for d in cider-arch emacs-arch latex-arch; do
         tee >>/etc/distrobox/distrobox.ini <<EOF
 [$d]
 image=ghcr.io/marpogaus/$d
 pull=true
 replace=true
-pre-init-hooks="$PRE_INIT_HOOK"
+pre-init-hooks="update-mirrors DE"
 EOF
 done
 

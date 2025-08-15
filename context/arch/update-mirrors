@@ -1,4 +1,4 @@
 #!/bin/bash
 set -ouex pipefail
 
-curl -s "https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on?country=$1" | grep Server | sed 's:#Server:Server:' | tee /etc/pacman.d/mirrorlist
+curl -s "https://archlinux.org/mirrorlist/?protocol=https&ip_version=4&use_mirror_status=on&country=$1" | grep Server | sed 's:#Server:Server:' | tee /etc/pacman.d/mirrorlist

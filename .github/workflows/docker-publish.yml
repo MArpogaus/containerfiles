@@ -82,7 +82,6 @@ jobs:
         with:
           image: ${{ steps.build_image.outputs.image }}
           tags: ${{ steps.build_image.outputs.tags }}
-          registry: ${{ steps.registry_case.outputs.lowercase }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
   
@@ -93,7 +92,7 @@ jobs:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
-          registry: ${{ steps.registry_case.outputs.lowercase }}
+          registry: ${{ env.REGISTRY }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
       - name: Install cosign

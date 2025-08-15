@@ -7,6 +7,8 @@ update-mirrors US
 pacman -Syyu --noconfirm
 pacman -S --noconfirm \
 	biber \
+	perl-file-homedir \
+	perl-yaml-tiny \
 	texlive-basic \
 	texlive-bibtexextra \
 	texlive-binextra \

@@ -69,6 +69,7 @@ cd $TMP_DIR
 
 make -f /usr/share/selinux/devel/Makefile homed.pp
 semodule --install=homed.pp
+semodule --install=/ctx/usbguard-daemon.pp
 
 # Enable the authselect profile feature and the systemd service
 authselect enable-feature with-systemd-homed

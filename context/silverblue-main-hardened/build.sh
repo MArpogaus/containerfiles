@@ -9,6 +9,9 @@ set -ouex pipefail
 ### Install packages
 dnf5 install -y zsh
 
+# Clean dnf caches
+dnf clean all
+
 ### Add public cosign key
 cd /tmp
 
@@ -26,8 +29,8 @@ curl -o /etc/pki/containers/marpogaus-cosign.pub https://raw.githubusercontent.c
 POLICY_FILE="/etc/containers/policy.json"
 
 jq --arg image_registry "ghcr.io/marpogaus" \
-   --arg image_registry_key "marpogaus-cosign" \
-   '.transports.docker |=
+	--arg image_registry_key "marpogaus-cosign" \
+	'.transports.docker |=
     { $image_registry: [
         {
             "type": "sigstoreSigned",
@@ -49,7 +52,7 @@ tee >>/etc/distrobox/distrobox.ini <<EOF
 EOF
 
 for d in cider-arch emacs-arch latex-arch; do
-        tee >>/etc/distrobox/distrobox.ini <<EOF
+	tee >>/etc/distrobox/distrobox.ini <<EOF
 [$d]
 image=ghcr.io/marpogaus/$d
 pull=true
@@ -67,21 +70,26 @@ cd $TMP_DIR
 make -f /usr/share/selinux/devel/Makefile homed.pp
 semodule --install=homed.pp
 
-# Add public key
-mkdir -p /var/lib/systemd/home/
-cp /ctx/local.public /var/lib/systemd/home/
-
-# Set file context
-restorecon -rv \
-        /usr/lib/systemd/systemd-homed \
-        /usr/lib/systemd/systemd-homework \
-        /usr/lib/systemd/system/systemd-homed.service \
-        /usr/lib/systemd/system/systemd-homed-activate.service \
-        /var/lib/systemd/home
-
 # Enable the authselect profile feature and the systemd service
 authselect enable-feature with-systemd-homed
 systemctl enable systemd-homed
 
-### Clean dnf caches
-dnf clean all
+### Copy additional system files
+rsync -rzP --chown=root:root sysroot/ /
+
+# Ensure correct file context
+restorecon \
+	-e /dev \
+	-e /mnt \
+	-e /proc \
+	-e /run \
+	-e /sys \
+	-e /tmp \
+	-vRF /
+
+### Toggle some additional features
+ujust --yes toggle-bluetooth-modules
+ujust --yes toggle-container-domain-userns-creation
+ujust --yes toggle-cups
+ujust --yes toggle-mac-randomization
+ujust --yes toggle-xwayland

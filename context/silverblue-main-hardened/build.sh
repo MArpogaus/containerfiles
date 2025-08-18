@@ -75,7 +75,7 @@ authselect enable-feature with-systemd-homed
 systemctl enable systemd-homed
 
 ### Copy additional system files
-rsync -rzP --chown=root:root sysroot/ /
+rsync -rzP --chown=root:root /ctx/sysroot/ /
 
 # Ensure correct file context
 restorecon \

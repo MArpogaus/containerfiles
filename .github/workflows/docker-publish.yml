@@ -35,6 +35,7 @@ jobs:
           - emacs-arch
           - latex-arch
           - silverblue-main-hardened
+          - silverblue-nvidia-hardened
         platform:
           - linux/amd64
           # - linux/arm/v6

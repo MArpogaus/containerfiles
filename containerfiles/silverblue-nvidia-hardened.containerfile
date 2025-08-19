@@ -4,7 +4,7 @@ FROM scratch AS ctx
 COPY silverblue-main-hardened /
 
 # Base Image
-FROM ghcr.io/secureblue/silverblue-main-hardened:latest
+FROM ghcr.io/secureblue/silverblue-nvidia-hardened:latest
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \

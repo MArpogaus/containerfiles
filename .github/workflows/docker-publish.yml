@@ -33,6 +33,8 @@ jobs:
           - cider-arch
           - dev-arch
           - emacs-arch
+          - emacs-alpine
+          - emacs-opensuse
           - latex-arch
           - silverblue-main-hardened
           - silverblue-nvidia-hardened

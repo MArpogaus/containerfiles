@@ -7,7 +7,6 @@ apk update
 # Install packages
 apk add --no-cache \
 	bash \
-	bash-language-server \
 	bat \
 	cmake \
 	ctags \
@@ -17,7 +16,7 @@ apk add --no-cache \
 	fd \
 	fzf \
 	git \
-	git-delta \
+	delta \
 	graphviz \
 	htop \
 	hunspell \
@@ -25,7 +24,6 @@ apk add --no-cache \
 	imagemagick \
 	pandoc \
 	parallel \
-	pdf2svg \
 	ripgrep \
 	shellcheck \
 	shfmt \

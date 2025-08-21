@@ -9,34 +9,32 @@ zypper -n dist-upgrade
 
 # Install packages
 zypper -n install \
+	ImageMagick \
+	ShellCheck \
 	bash \
-	bash-language-server \
 	bat \
 	cmake \
 	ctags \
 	direnv \
 	emacs \
-	enchant-2 \
+	enchant \
 	fd \
 	fzf \
 	git \
 	git-delta \
+	gnu_parallel \
 	graphviz \
 	htop \
 	hunspell \
-	hunspell-en_US \
-	ImageMagick \
 	pandoc \
-	parallel \
 	pdf2svg \
+	python311-uv \
 	ripgrep \
-	ShellCheck \
 	shfmt \
 	tmux \
 	tree \
 	unzip \
 	vim \
-	python311-uv \
 	zathura-plugin-pdf-poppler \
 	zip
 

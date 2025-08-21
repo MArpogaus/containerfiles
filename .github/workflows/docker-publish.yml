@@ -36,6 +36,7 @@ jobs:
           - emacs-alpine
           - emacs-opensuse
           - latex-arch
+          - latex-alpine
           - silverblue-main-hardened
           - silverblue-nvidia-hardened
         platform:

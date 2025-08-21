@@ -31,9 +31,14 @@ jobs:
       matrix:
         containerfile:
           - cider-arch
+          - cider-debian
+          - cider-fedora
           - dev-arch
           - emacs-arch
+          - emacs-alpine
+          - emacs-opensuse
           - latex-arch
+          - latex-alpine
           - silverblue-main-hardened
           - silverblue-nvidia-hardened
         platform:
@@ -45,7 +50,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5

@@ -11,7 +11,7 @@ apk add --no-cache \
 	cmake \
 	ctags \
 	direnv \
-	emacs \
+	emacs-pgtk-nativecomp \
 	enchant2 \
 	fd \
 	fzf \

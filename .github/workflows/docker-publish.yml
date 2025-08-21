@@ -31,6 +31,8 @@ jobs:
       matrix:
         containerfile:
           - cider-arch
+          - cider-debian
+          - cider-fedora
           - dev-arch
           - emacs-arch
           - emacs-alpine

@@ -36,6 +36,7 @@ jobs:
           - dev-arch
           - emacs-arch
           - emacs-alpine
+          - emacs-fedora
           - emacs-opensuse
           - latex-arch
           - latex-alpine

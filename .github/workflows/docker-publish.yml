@@ -34,12 +34,14 @@ jobs:
           - cider-debian
           - cider-fedora
           - dev-arch
-          - emacs-arch
+          - dev-fedora
           - emacs-alpine
+          - emacs-arch
           - emacs-fedora
           - emacs-opensuse
-          - latex-arch
           - latex-alpine
+          - latex-arch
+          - latex-fedora
           - silverblue-main-hardened
           - silverblue-nvidia-hardened
         platform:

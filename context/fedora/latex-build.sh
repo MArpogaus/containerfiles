@@ -12,6 +12,7 @@ dnf install -y \
 	texlive-listingsutf8 \
 	texlive-scheme-medium \
 	texlive-usebib \
+        texlive-type1cm \
 	zathura-pdf-poppler
 
 # Clean package cache

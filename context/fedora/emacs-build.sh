@@ -14,6 +14,7 @@ dnf install -y \
 	emacs-pgtk \
 	enchant2 \
 	enchant2-devel \
+	envsubst \
 	fd \
 	fzf \
 	git \

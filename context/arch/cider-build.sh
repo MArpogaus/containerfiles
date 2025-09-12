@@ -18,4 +18,3 @@ EOF
 pacman -Syyu --noconfirm
 pacman -S --noconfirm cider pipewire-pulse
 pacman -Scc --noconfirm
-

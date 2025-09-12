@@ -26,4 +26,3 @@ fi
 if [ "$1" = "$ETHERNET" ] && [ "$2" = "down" ]; then
     enable_wifi
 fi
-

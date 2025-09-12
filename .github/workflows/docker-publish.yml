@@ -30,17 +30,17 @@ jobs:
     strategy:
       matrix:
         containerfile:
-          - cider-arch
+          # - cider-arch
           - cider-debian
           - cider-fedora
-          - dev-arch
+          # - dev-arch
           - dev-fedora
           - emacs-alpine
-          - emacs-arch
+          # - emacs-arch
           - emacs-fedora
           - emacs-opensuse
           - latex-alpine
-          - latex-arch
+          # - latex-arch
           - latex-fedora
           - silverblue-main-hardened
           - silverblue-nvidia-hardened

@@ -51,13 +51,12 @@ tee >>/etc/distrobox/distrobox.ini <<EOF
 # My custom images
 EOF
 
-for d in cider-arch emacs-arch latex-arch; do
+for d in cider-fedora dev-fedora emacs-fedora latex-fedora; do
 	tee >>/etc/distrobox/distrobox.ini <<EOF
 [$d]
 image=ghcr.io/marpogaus/$d
 pull=true
 replace=true
-pre_init_hooks="update-mirrors DE"
 EOF
 done
 

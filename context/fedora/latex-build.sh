@@ -7,12 +7,11 @@ dnf makecache
 # Install packages
 dnf install -y \
 	pdf2svg \
+	texlive-scheme-medium \
 	texlive-collection-bibtexextra \
 	texlive-collection-fontsextra \
-	texlive-listingsutf8 \
-	texlive-scheme-medium \
-	texlive-usebib \
-        texlive-type1cm \
+        texlive-collection-latexextra \
+        texlive-collection-pictures \
 	zathura-pdf-poppler
 
 # Clean package cache

@@ -62,23 +62,14 @@ EOF
 done
 
 ### Enable systemd-homed
-# Build and install SELinux custom policy
-TMP_DIR=/tmp/homed-selinux
-git clone https://github.com/richiedaze/homed-selinux $TMP_DIR
-cd $TMP_DIR
-
-make -f /usr/share/selinux/devel/Makefile homed.pp
-semodule --install=homed.pp
-semodule --install=/ctx/usbguard-daemon.pp
-
-# Enable the authselect profile feature and the systemd service
 authselect enable-feature with-systemd-homed
 systemctl enable systemd-homed
 
 ### Copy additional system files
 rsync -rzP --chown=root:root /ctx/sysroot/ /
 
-# Ensure correct file context
+### Add additional policy for usbguard and relabel system
+semodule --install=/ctx/usbguard-daemon.pp
 restorecon \
 	-e /dev \
 	-e /mnt \

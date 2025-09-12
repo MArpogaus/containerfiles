@@ -29,8 +29,8 @@ curl -o /etc/pki/containers/marpogaus-cosign.pub https://raw.githubusercontent.c
 POLICY_FILE="/etc/containers/policy.json"
 
 jq --arg image_registry "ghcr.io/marpogaus" \
-	--arg image_registry_key "marpogaus-cosign" \
-	'.transports.docker |=
+    --arg image_registry_key "marpogaus-cosign" \
+    '.transports.docker |=
     { $image_registry: [
         {
             "type": "sigstoreSigned",
@@ -52,7 +52,7 @@ tee >>/etc/distrobox/distrobox.ini <<EOF
 EOF
 
 for d in cider-fedora dev-fedora emacs-fedora latex-fedora; do
-	tee >>/etc/distrobox/distrobox.ini <<EOF
+    tee >>/etc/distrobox/distrobox.ini <<EOF
 [$d]
 image=ghcr.io/marpogaus/$d
 pull=true
@@ -70,10 +70,10 @@ rsync -rzP --chown=root:root /ctx/sysroot/ /
 ### Add additional policy for usbguard and relabel system
 semodule --install=/ctx/usbguard-daemon.pp
 restorecon \
-	-e /dev \
-	-e /mnt \
-	-e /proc \
-	-e /run \
-	-e /sys \
-	-e /tmp \
-	-vRF /
+    -e /dev \
+    -e /mnt \
+    -e /proc \
+    -e /run \
+    -e /sys \
+    -e /tmp \
+    -vRF /

@@ -9,10 +9,10 @@ apk update
 
 # Install LaTeX and related packages
 apk add --no-cache \
-	texlive-most \
-	texmf-dist-fontsextra \
-	pdf2svg@testing \
-	zathura-pdf-poppler
+    texlive-most \
+    texmf-dist-fontsextra \
+    pdf2svg@testing \
+    zathura-pdf-poppler
 
 # Clean package cache
 apk cache clean

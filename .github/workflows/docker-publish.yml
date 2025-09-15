@@ -76,7 +76,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           oci: true
           layers: true
-          build-args: |
+          extra-args: |
             cache-to=${{ env.REGISTRY }}/cache
             cache-from=${{ env.REGISTRY }}/cache
       # https://github.com/macbre/push-to-ghcr/issues/12

@@ -52,12 +52,6 @@ jobs:
       fail-fast: false
 
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@v10
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
       - name: Checkout repository
         uses: actions/checkout@v5
       - name: Extract metadata (tags, labels) for Docker
@@ -81,6 +75,10 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: true
+          layers: true
+          build-args: |
+            cache-to=${{ env.REGISTRY }}/cache
+            cache-from=${{ env.REGISTRY }}/cache
       # https://github.com/macbre/push-to-ghcr/issues/12
       - name: Lowercase Registry
         id: registry_case

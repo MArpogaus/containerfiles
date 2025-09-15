@@ -2,19 +2,19 @@
 set -ouex pipefail
 
 # Update package database
-apk update
+dnf makecache
 
 # Install packages
-apk add --no-cache \
-    bash \
+dnf install -y \
     bat \
     cmake \
     ctags \
     delta \
     direnv \
-    emacs-pgtk-nativecomp \
+    emacs-pgtk \
     enchant2 \
-    enchant2-dev \
+    enchant2-devel \
+    envsubst \
     fd \
     fzf \
     git \
@@ -22,12 +22,12 @@ apk add --no-cache \
     htop \
     hunspell \
     hunspell-en \
-    imagemagick \
+    ImageMagick \
     libtool \
     make \
     pandoc \
     parallel \
-    py3-uv \
+    uv \
     ripgrep \
     shellcheck \
     shfmt \
@@ -39,4 +39,4 @@ apk add --no-cache \
     zip
 
 # Clean package cache
-apk cache clean
+dnf clean all

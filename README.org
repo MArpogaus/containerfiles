@@ -60,7 +60,7 @@ If you're running [[https://secureblue.dev/][secureblue]] or similar security-en
    #+begin_src bash
    # Backup existing policy
    cp /etc/containers/policy.json $HOME/.config/containers/policy.json.bak
-   
+
    jq '.transports.docker["ghcr.io/marpogaus"] = [{"type": "sigstoreSigned", "keyPath": "/etc/pki/containers/marpogaus-cosign.pub", "signedIdentity": {"type": "matchRepository"}}]' $HOME/.config/containers/policy.json.bak > $HOME/.config/containers/policy.json
    #+end_src
 
@@ -68,10 +68,10 @@ If you're running [[https://secureblue.dev/][secureblue]] or similar security-en
    #+begin_src bash
    # Create directory for custom keys
    sudo mkdir -p $HOME/.config/pki/containers
-   
+
    # Download the public key
    curl -o cosign.pub https://raw.githubusercontent.com/marpogaus/containerfiles/main/cosign.pub
-   
+
    # Install the key
    sudo cp cosign.pub $HOME/.config/pki/containers/marpogaus-cosign.pub
    #+end_src

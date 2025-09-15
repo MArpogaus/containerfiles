@@ -29,8 +29,8 @@ curl -o /etc/pki/containers/marpogaus-cosign.pub https://raw.githubusercontent.c
 POLICY_FILE="/etc/containers/policy.json"
 
 jq --arg image_registry "ghcr.io/marpogaus" \
-	--arg image_registry_key "marpogaus-cosign" \
-	'.transports.docker |=
+    --arg image_registry_key "marpogaus-cosign" \
+    '.transports.docker |=
     { $image_registry: [
         {
             "type": "sigstoreSigned",
@@ -51,39 +51,29 @@ tee >>/etc/distrobox/distrobox.ini <<EOF
 # My custom images
 EOF
 
-for d in cider-arch emacs-arch latex-arch; do
-	tee >>/etc/distrobox/distrobox.ini <<EOF
+for d in cider-fedora dev-fedora emacs-fedora latex-fedora; do
+    tee >>/etc/distrobox/distrobox.ini <<EOF
 [$d]
 image=ghcr.io/marpogaus/$d
 pull=true
 replace=true
-pre_init_hooks="update-mirrors DE"
 EOF
 done
 
 ### Enable systemd-homed
-# Build and install SELinux custom policy
-TMP_DIR=/tmp/homed-selinux
-git clone https://github.com/richiedaze/homed-selinux $TMP_DIR
-cd $TMP_DIR
-
-make -f /usr/share/selinux/devel/Makefile homed.pp
-semodule --install=homed.pp
-semodule --install=/ctx/usbguard-daemon.pp
-
-# Enable the authselect profile feature and the systemd service
 authselect enable-feature with-systemd-homed
 systemctl enable systemd-homed
 
 ### Copy additional system files
 rsync -rzP --chown=root:root /ctx/sysroot/ /
 
-# Ensure correct file context
+### Add additional policy for usbguard and relabel system
+semodule --install=/ctx/usbguard-daemon.pp
 restorecon \
-	-e /dev \
-	-e /mnt \
-	-e /proc \
-	-e /run \
-	-e /sys \
-	-e /tmp \
-	-vRF /
+    -e /dev \
+    -e /mnt \
+    -e /proc \
+    -e /run \
+    -e /sys \
+    -e /tmp \
+    -vRF /

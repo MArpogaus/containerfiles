@@ -5,7 +5,7 @@ set -ouex pipefail
 rpm --import https://repo.cider.sh/RPM-GPG-KEY
 
 # Create repository file
-tee /etc/yum.repos.d/cider.repo << 'EOF'
+tee /etc/yum.repos.d/cider.repo <<'EOF'
 [cidercollective]
 name=Cider Collective Repository
 baseurl=https://repo.cider.sh/rpm/RPMS

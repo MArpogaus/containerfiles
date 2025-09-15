@@ -10,20 +10,24 @@ apk add --no-cache \
     bat \
     cmake \
     ctags \
+    delta \
     direnv \
     emacs-pgtk-nativecomp \
     enchant2 \
+    enchant2-dev \
     fd \
     fzf \
     git \
-    delta \
     graphviz \
     htop \
     hunspell \
     hunspell-en \
     imagemagick \
+    libtool \
+    make \
     pandoc \
     parallel \
+    py3-uv \
     ripgrep \
     shellcheck \
     shfmt \
@@ -31,7 +35,6 @@ apk add --no-cache \
     tree \
     unzip \
     vim \
-    py3-uv \
     zathura-pdf-poppler \
     zip
 

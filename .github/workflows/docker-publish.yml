@@ -77,8 +77,8 @@ jobs:
           oci: true
           layers: true
           extra-args: |
-            cache-to=${{ env.REGISTRY }}/cache
-            cache-from=${{ env.REGISTRY }}/cache
+            --cache-to=${{ env.REGISTRY }}/cache
+            --cache-from=${{ env.REGISTRY }}/cache
       # https://github.com/macbre/push-to-ghcr/issues/12
       - name: Lowercase Registry
         id: registry_case

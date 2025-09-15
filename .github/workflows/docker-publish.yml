@@ -52,6 +52,12 @@ jobs:
       fail-fast: false
 
     steps:
+      # https://github.com/macbre/push-to-ghcr/issues/12
+      - name: Lowercase Registry
+        id: registry_case
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ env.REGISTRY }}
       - name: Checkout repository
         uses: actions/checkout@v5
       - name: Extract metadata (tags, labels) for Docker
@@ -77,14 +83,8 @@ jobs:
           oci: true
           layers: true
           extra-args: |
-            --cache-to=${{ env.REGISTRY }}/cache
-            --cache-from=${{ env.REGISTRY }}/cache
-      # https://github.com/macbre/push-to-ghcr/issues/12
-      - name: Lowercase Registry
-        id: registry_case
-        uses: ASzc/change-string-case-action@v6
-        with:
-          string: ${{ env.REGISTRY }}
+            --cache-to=${{ steps.registry_case.outputs.lowercase }}/cache
+            --cache-from=${{ steps.registry_case.outputs.lowercase }}/cache
       - name: Push To GHCR
         uses: redhat-actions/push-to-registry@v2
         if: github.event_name != 'pull_request'

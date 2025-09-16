@@ -66,7 +66,7 @@ systemctl enable systemd-homed
 
 ### Copy additional system files
 rsync -rzP --chown=root:root --chmod=D700,F600 /ctx/sysroot/ /
-chmod +x /etc/NetworkManager/dispatcher.d/50-wifi-wired-exclusive.sh
+chmod 760 /etc/NetworkManager/dispatcher.d/50-wifi-wired-exclusive.sh
 
 ### Add additional policy for usbguard and relabel system
 semodule --install=/ctx/usbguard-daemon.pp

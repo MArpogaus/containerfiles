@@ -6,6 +6,7 @@ dnf makecache
 
 # Install packages
 dnf install -y \
+    ImageMagick \
     bat \
     cmake \
     ctags \
@@ -16,25 +17,29 @@ dnf install -y \
     enchant2-devel \
     envsubst \
     fd \
+    ffmpegthumbnailer \
     fzf \
     git \
     graphviz \
     htop \
     hunspell \
     hunspell-en \
-    ImageMagick \
+    libpng \
     libtool \
     make \
+    mediainfo \
     pandoc \
     parallel \
-    uv \
+    poppler-utils \
     ripgrep \
     shellcheck \
     shfmt \
     tmux \
     tree \
     unzip \
+    uv \
     vim \
+    vips-tools \
     zathura-pdf-poppler \
     zip
 

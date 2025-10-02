@@ -23,6 +23,7 @@ dnf install -y \
     graphviz \
     htop \
     hunspell \
+    hunspell-de \
     hunspell-en \
     libpng \
     libtool \

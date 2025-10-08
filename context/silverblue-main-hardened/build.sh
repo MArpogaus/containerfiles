@@ -81,3 +81,4 @@ restorecon \
 
 ### Regenerate initramfs
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/secureblue/secureblue/refs/heads/live/files/scripts/regenerateinitramfs.sh)"
+lsinitrd

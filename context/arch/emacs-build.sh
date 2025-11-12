@@ -6,6 +6,7 @@ update-mirrors US
 
 pacman -Syyu --noconfirm
 pacman -S --noconfirm \
+    7zip \
     bash-language-server \
     bat \
     cmake \
@@ -14,6 +15,7 @@ pacman -S --noconfirm \
     emacs-wayland \
     enchant \
     fd \
+    ffmpegthumbnailer \
     fzf \
     git \
     git-delta \
@@ -23,9 +25,13 @@ pacman -S --noconfirm \
     hunspell-de \
     hunspell-en_us \
     imagemagick \
+    libvips \
+    mediainfo \
     pandoc \
     parallel \
     pdf2svg \
+    poppler \
+    python-uv \
     ripgrep \
     shellcheck \
     shfmt \
@@ -33,7 +39,6 @@ pacman -S --noconfirm \
     tree \
     unzip \
     vim \
-    python-uv \
     zathura-pdf-poppler \
     zip
 pacman -Scc --noconfirm

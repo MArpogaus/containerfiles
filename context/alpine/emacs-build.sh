@@ -6,6 +6,7 @@ apk update
 
 # Install packages
 apk add --no-cache \
+    7zip \
     bash \
     bat \
     cmake \
@@ -16,17 +17,21 @@ apk add --no-cache \
     enchant2 \
     enchant2-dev \
     fd \
+    ffmpegthumbnailer \
     fzf \
     git \
     graphviz \
     htop \
     hunspell \
+    hunspell-de-de \
     hunspell-en \
     imagemagick \
     libtool \
     make \
+    mediainfo \
     pandoc \
     parallel \
+    poppler-utils \
     py3-uv \
     ripgrep \
     shellcheck \
@@ -35,6 +40,7 @@ apk add --no-cache \
     tree \
     unzip \
     vim \
+    vips-tools \
     zathura-pdf-poppler \
     zip
 

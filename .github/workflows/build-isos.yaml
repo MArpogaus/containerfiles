@@ -69,7 +69,7 @@ jobs:
           iso_name: ${{ env.IMAGE_NAME }}.iso
           enrollment_password: "secureblue"
           secure_boot_key_url: "https://github.com/secureblue/secureblue/raw/refs/heads/live/files/system/etc/pki/akmods/certs/akmods-secureblue.der"
-          repos: "/github/workspace/secureblue.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
+          repos: "/etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
 
       - name: Rename ISO
         id: rename

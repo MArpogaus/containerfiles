@@ -58,10 +58,8 @@ jobs:
         uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ env.REGISTRY }}
-      - name: Remove unnecessary files
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+      - name: Maximize build space
+        uses: jlumbroso/free-disk-space@v1.3.1
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: cache podman

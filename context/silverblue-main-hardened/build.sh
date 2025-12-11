@@ -68,6 +68,7 @@ systemctl enable systemd-homed
 rsync -rzP --chown=root:root --chmod=D700,F600 /ctx/sysroot/ /
 chmod 760 /etc/NetworkManager/dispatcher.d/50-wifi-wired-exclusive.sh
 chmod 644 /usr/lib/tmpfiles.d/*
+chmod -R u=rwX,og=rX /usr/share/factory
 
 ### Add additional policy for usbguard and relabel system
 semodule --install=/ctx/usbguard-daemon.pp

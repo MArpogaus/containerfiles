@@ -58,12 +58,23 @@ jobs:
         uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ env.REGISTRY }}
-      - name: Remove unnecessary files
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+      - name: Maximize build space
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: true
+
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: true
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: cache podman
         uses: actions/cache@v4
         with:
@@ -80,6 +91,8 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value={{branch}}-{{sha}}
+            type=raw,value={{branch}}-{{date 'YYYYMMDD-HHmmss'}}
       - name: Build Image
         id: build_image
         uses: redhat-actions/buildah-build@v2

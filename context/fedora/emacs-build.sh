@@ -6,6 +6,7 @@ dnf makecache
 
 # Install packages
 dnf install -y \
+    7zip \
     ImageMagick \
     bat \
     cmake \

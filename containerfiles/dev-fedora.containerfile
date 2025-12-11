@@ -2,7 +2,7 @@ FROM scratch AS ctx
 COPY fedora /
 
 # Base Image
-FROM ghcr.io/ublue-os/fedora-toolbox:latest
+FROM quay.io/fedora/fedora-toolbox:latest
 
 LABEL com.github.containers.toolbox="true" \
       usage="This image is meant to be used with the toolbox or distrobox command"

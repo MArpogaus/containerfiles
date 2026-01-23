@@ -58,13 +58,14 @@ jobs:
         uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ env.REGISTRY }}
+
+      # Ensure that there is disk space available
       - name: Maximize build space
         uses: jlumbroso/free-disk-space@v1.3.1
         with:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
           tool-cache: true
-
           # all of these default to true, but feel free to set to
           # "false" if necessary for your workflow
           android: true
@@ -73,6 +74,8 @@ jobs:
           large-packages: false
           docker-images: false
           swap-storage: true
+
+      # Checkout repo and build image
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: cache podman
@@ -107,29 +110,25 @@ jobs:
           #extra-args: |
           #  --cache-to=${{ steps.registry_case.outputs.lowercase }}/cache
           #  --cache-from=${{ steps.registry_case.outputs.lowercase }}/cache
+
+      # Push image to registry
       - name: Push To GHCR
         uses: redhat-actions/push-to-registry@v2
         if: github.event_name != 'pull_request'
         id: push
-        env:
-          REGISTRY_USER: ${{ github.actor }}
-          REGISTRY_PASSWORD: ${{ github.token }}
         with:
           image: ${{ steps.build_image.outputs.image }}
           tags: ${{ steps.build_image.outputs.tags }}
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Sign container
       - name: Log in to the Container registry
         uses: docker/login-action@v3
-        env:
-          REGISTRY_USER: ${{ github.actor }}
-          REGISTRY_PASSWORD: ${{ github.token }}
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Install cosign
         uses: sigstore/cosign-installer@v3
       - name: Sign container image

@@ -141,3 +141,13 @@ jobs:
       - name: Echo outputs
         run: |
           echo "${{ toJSON(steps.push.outputs) }}"
+
+      # generate provenance and push it to the container registry
+      - name: provenance
+        if: github.event_name != 'pull_request'
+        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.1.0
+        with:
+          image: ${{ steps.build_image.outputs.image }}
+          digest: ${{ steps.push.outputs.digest }}
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}

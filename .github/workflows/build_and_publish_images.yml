@@ -1,0 +1,56 @@
+# ref: https://docs.github.com/en/actions/tutorials/publish-packages/publish-docker-images#publishing-images-to-github-packages
+# ref: https://github.com/ublue-os/boxkit/tree/main
+name: Build and publish all container images
+
+on:
+  schedule:
+  - cron: 0 7 * * *
+  push:
+    branches: [main, dev]
+    # Publish semver tags as releases.
+    tags: [v*.*.*]
+     # don't rebuild if only documentation has changed
+    paths-ignore: ['**.md']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
+    permissions:
+      contents: read # Needed to pull the repo for the build
+      actions: read # Needed to read actions and actions logs for provenance generation
+      packages: write # Needed to publish images
+      id-token: write # Needed for token generation for signing
+    strategy:
+      matrix:
+        containerfile:
+        - cider-arch
+        - cider-debian
+        - cider-fedora
+        - dev-arch
+        - dev-fedora
+        - emacs-alpine
+        - emacs-arch
+        - emacs-fedora
+        - emacs-opensuse
+        - latex-alpine
+        - latex-arch
+        - latex-fedora
+        - silverblue-main-hardened
+        - silverblue-nvidia-hardened
+        platform:
+        - linux/amd64
+          # - linux/arm/v6
+          # - linux/arm/v7
+          # - linux/arm64
+      fail-fast: false
+    uses: ./.github/workflows/build_and_publish_one_image.yml
+    with:
+      containerfile: ${{ matrix.containerfile }}
+      platform: ${{ matrix.platform }}
+    secrets:
+      SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}

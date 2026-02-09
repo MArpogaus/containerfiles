@@ -1,0 +1,134 @@
+#ref: https://github.com/secureblue/secureblue/blob/01b1830ee07cbafd15e5558f3a7e58b59143c4fa/.github/workflows/build-one-recipe.yml
+name: Build and publish a container image
+permissions: {}
+on:
+  workflow_call:
+    inputs:
+      containerfile:
+        type: string
+        required: true
+      platform:
+        type: boolean
+        required: false
+        default: false
+    secrets:
+      SIGNING_SECRET:
+        required: true
+
+env:
+  REGISTRY: ghcr.io/${{ github.repository_owner }}
+
+jobs:
+  build_and_push_image:
+    runs-on: ubuntu-latest
+    outputs:
+      FULL_IMAGE_REF: ${{ steps.build_image.outputs.image }}
+      IMAGE_DIGEST: ${{ steps.push.outputs.digest }}
+    permissions:
+      contents: read # Needed to pull the repo for the build
+      packages: write # Needed to publish images
+      id-token: write # Needed for token generation for signing
+    steps:
+      # https://github.com/macbre/push-to-ghcr/issues/12
+    - name: Lowercase Registry
+      id: registry_case
+      uses: ASzc/change-string-case-action@v6
+      with:
+        string: ${{ env.REGISTRY }}
+
+      # Ensure that there is disk space available
+    - name: Maximize build space
+      uses: jlumbroso/free-disk-space@v1.3.1
+      with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+        tool-cache: true
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: false
+        docker-images: false
+        swap-storage: true
+
+      # Checkout repo and build image
+    - name: Checkout repository
+      uses: actions/checkout@v6
+    - name: cache podman
+      uses: actions/cache@v5
+      with:
+        path: ~/.local/share/containers
+        key: podman
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ inputs.containerfile }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=raw,value=latest,enable={{is_default_branch}}
+          type=raw,value={{branch}}-{{sha}}
+          type=raw,value={{branch}}-{{date 'YYYYMMDD-HHmmss'}}
+    - name: Build Image
+      id: build_image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        containerfiles: ./containerfiles/${{ inputs.containerfile }}.containerfile
+        context: ./context
+        platforms: ${{ inputs.platform }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        oci: true
+        layers: true
+          #extra-args: |
+          #  --cache-to=${{ steps.registry_case.outputs.lowercase }}/cache
+          #  --cache-from=${{ steps.registry_case.outputs.lowercase }}/cache
+
+      # Push image to registry
+    - name: Push To GHCR
+      id: push
+      if: github.event_name != 'pull_request'
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build_image.outputs.image }}
+        tags: ${{ steps.build_image.outputs.tags }}
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+
+      # Sign container
+    - name: Log in to the Container registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+    - name: Install cosign
+      uses: sigstore/cosign-installer@v3
+    - name: Sign container image
+      if: github.event_name != 'pull_request'
+      run: |
+        cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ inputs.containerfile }}:${{ github.ref_name }}@${{ steps.push.outputs.digest }}
+      env:
+        COSIGN_EXPERIMENTAL: false
+        COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+    - name: Echo outputs
+      run: |
+        echo "${{ toJSON(steps.push.outputs) }}"
+
+  provenance:
+    needs: [build_and_push_image]
+    permissions:
+      actions: read # for detecting the Github Actions environment.
+      id-token: write # for creating OIDC tokens for signing.
+      packages: write # for uploading attestations.
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.1.0
+    with:
+      image: ${{ needs.build_and_push_image.outputs.FULL_IMAGE_REF }}
+      digest: ${{ needs.build_and_push_image.outputs.IMAGE_DIGEST }}
+      registry-username: ${{ github.actor }}
+    secrets:
+      registry-password: ${{ github.token }}

@@ -7,7 +7,7 @@ set -ouex pipefail
 # At run-time the /usr/etc/ directory then contains the original configuration of the image.
 
 ### Install packages
-PACKAGES="${EXTRA_PACKAGES:-} gnupg2-scdaemon zsh"
+PACKAGES="${EXTRA_PACKAGES:-} zsh"
 # shellcheck disable=2086
 dnf5 install -y ${PACKAGES}
 

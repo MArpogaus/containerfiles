@@ -4,9 +4,16 @@ permissions: {}
 on:
   workflow_call:
     inputs:
+      image-name:
+        type: string
+        required: true
       containerfile:
         type: string
         required: true
+      context:
+        type: string
+        required: false
+        default: .
       platform:
         type: string
         required: true
@@ -67,7 +74,7 @@ jobs:
       shell: bash
       if: ${{ inputs.slsa-verify }}
       env:
-        CONTAINERFILE: ./containerfiles/${{ inputs.containerfile }}.containerfile
+        CONTAINERFILE: ${{ inputs.containerfile }}
       run: |
         set -exuo pipefail
 
@@ -97,7 +104,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ inputs.containerfile }}
+        images: ${{ env.REGISTRY }}/${{ inputs.image-name }}
         tags: |
           type=ref,event=branch
           type=ref,event=pr
@@ -110,8 +117,8 @@ jobs:
       id: build_image
       uses: redhat-actions/buildah-build@v2
       with:
-        containerfiles: ./containerfiles/${{ inputs.containerfile }}.containerfile
-        context: ./context
+        containerfiles: ${{ inputs.containerfile }}
+        context: ${{ inputs.context }}
         platforms: ${{ inputs.platform }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
@@ -144,7 +151,7 @@ jobs:
     - name: Sign container image
       if: github.event_name != 'pull_request'
       run: |
-        cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ inputs.containerfile }}:${{ github.ref_name }}@${{ steps.push.outputs.digest }}
+        cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ inputs.image-name }}:${{ github.ref_name }}@${{ steps.push.outputs.digest }}
       env:
         COSIGN_EXPERIMENTAL: false
         COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}

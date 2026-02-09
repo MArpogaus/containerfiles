@@ -62,6 +62,12 @@ replace=true
 EOF
 done
 
+### Patch verification script
+sed -e 's:github.com/secureblue/secureblue:github.com/MArpogaus/containerfiles:' \
+    -e 's:ghcr.io/secureblue/:ghcr.io/marpogaus/:' \
+    -e "s:branch='live':branch='main':" \
+    -i /usr/libexec/secureblue/verify-provenance.sh
+
 ### Enable systemd-homed
 authselect enable-feature with-systemd-homed
 systemctl enable systemd-homed

@@ -74,5 +74,6 @@ jobs:
     with:
       containerfile: ${{ matrix.containerfile }}
       platform: ${{ matrix.platform }}
+      slsa-verify: true
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}

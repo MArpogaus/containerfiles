@@ -8,9 +8,8 @@ on:
         type: string
         required: true
       platform:
-        type: boolean
-        required: false
-        default: false
+        type: string
+        required: true
     secrets:
       SIGNING_SECRET:
         required: true
@@ -22,7 +21,7 @@ jobs:
   build_and_push_image:
     runs-on: ubuntu-latest
     outputs:
-      FULL_IMAGE_REF: ${{ steps.build_image.outputs.image }}
+      FULL_IMAGE_REF: ${{ steps.build_image.outputs.image-with-tag }}
       IMAGE_DIGEST: ${{ steps.push.outputs.digest }}
     permissions:
       contents: read # Needed to pull the repo for the build
@@ -131,4 +130,4 @@ jobs:
       digest: ${{ needs.build_and_push_image.outputs.IMAGE_DIGEST }}
       registry-username: ${{ github.actor }}
     secrets:
-      registry-password: ${{ github.token }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}

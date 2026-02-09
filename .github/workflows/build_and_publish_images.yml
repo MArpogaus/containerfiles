@@ -17,9 +17,8 @@ on:
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
-  build-and-push-image:
-    runs-on: ubuntu-latest
-    # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
+  distrobox-conatiner-images:
+    name: Build and push distrobox container images
     permissions:
       contents: read # Needed to pull the repo for the build
       actions: read # Needed to read actions and actions logs for provenance generation
@@ -40,6 +39,29 @@ jobs:
         - latex-alpine
         - latex-arch
         - latex-fedora
+        platform:
+        - linux/amd64
+          # - linux/arm/v6
+          # - linux/arm/v7
+          # - linux/arm64
+      fail-fast: false
+    uses: ./.github/workflows/build_and_publish_one_image.yml
+    with:
+      containerfile: ${{ matrix.containerfile }}
+      platform: ${{ matrix.platform }}
+    secrets:
+      SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+
+  secureblue-images:
+    name: Build and push secureblue container images
+    permissions:
+      contents: read # Needed to pull the repo for the build
+      actions: read # Needed to read actions and actions logs for provenance generation
+      packages: write # Needed to publish images
+      id-token: write # Needed for token generation for signing
+    strategy:
+      matrix:
+        containerfile:
         - silverblue-main-hardened
         - silverblue-nvidia-hardened
         platform:

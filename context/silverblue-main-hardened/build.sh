@@ -7,10 +7,9 @@ set -ouex pipefail
 # At run-time the /usr/etc/ directory then contains the original configuration of the image.
 
 ### Install packages
-dnf5 install -y \
-    gnome-remote-desktop \
-    gnupg2-scdaemon \
-    zsh
+PACKAGES="${EXTRA_PACKAGES:-} gnupg2-scdaemon zsh"
+# shellcheck disable=2086
+dnf5 install -y ${PACKAGES}
 
 # Clean dnf caches
 dnf clean all

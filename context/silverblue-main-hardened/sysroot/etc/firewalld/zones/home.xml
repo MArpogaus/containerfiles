@@ -9,5 +9,7 @@
   <service name="kdeconnect"/>
   <service name="sane"/>
   <service name="rdp"/>
+  <port port="53317" protocol="tcp"/>
+  <port port="53317" protocol="udp"/>
   <forward/>
 </zone>

@@ -7,10 +7,9 @@ set -ouex pipefail
 # At run-time the /usr/etc/ directory then contains the original configuration of the image.
 
 ### Install packages
-dnf5 install -y \
-    gnome-remote-desktop \
-    gnupg2-scdaemon \
-    zsh
+PACKAGES="${EXTRA_PACKAGES:-} zsh"
+# shellcheck disable=2086
+dnf5 install -y ${PACKAGES}
 
 # Clean dnf caches
 dnf clean all
@@ -62,6 +61,12 @@ pull=true
 replace=true
 EOF
 done
+
+### Patch verification script
+sed -e 's:github.com/secureblue/secureblue:github.com/MArpogaus/containerfiles:' \
+    -e 's:ghcr.io/secureblue/:ghcr.io/marpogaus/:' \
+    -e "s:branch='live':branch='main':" \
+    -i /usr/libexec/secureblue/verify-provenance.sh
 
 ### Enable systemd-homed
 authselect enable-feature with-systemd-homed

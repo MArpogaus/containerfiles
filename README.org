@@ -6,7 +6,7 @@
 [[https://github.com/marpogaus/containerfiles/stargazers][https://img.shields.io/github/stars/marpogaus/containerfiles.svg?style=flat-square]]
 [[https://github.com/marpogaus/containerfiles/issues][https://img.shields.io/github/issues/marpogaus/containerfiles.svg?style=flat-square]]
 [[https://github.com/marpogaus/containerfiles/blob/main/LICENSE][https://img.shields.io/github/license/marpogaus/containerfiles.svg?style=flat-square]]
-[[https://github.com/marpogaus/containerfiles/actions/workflows/docker-publish.yml][https://img.shields.io/github/actions/workflow/status/marpogaus/containerfiles/docker-publish.yml.svg?label=build&style=flat-square]]
+[[https://github.com/marpogaus/containerfiles/actions/workflows/build_and_publish_images.yml][https://img.shields.io/github/actions/workflow/status/marpogaus/containerfiles/build_and_publish_images.yml.svg?label=build&style=flat-square]]
 [[https://github.com/marpogaus/containerfiles/blob/main/.pre-commit-config.yaml][https://img.shields.io/badge/pre--commit-enabled-brightgreen.svg?logo=pre-commit&style=flat-square]]
 [[https://linkedin.com/in/marpogaus][https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555]]
 
@@ -93,7 +93,7 @@ To fork this repository and create your own signed container images:
            usage="This image is meant to be used with the toolbox or distrobox command"
      #+end_src
 
-3. *Update the build matrix* in =.github/workflows/docker-publish.yml=:
+3. *Update the build matrix* in =.github/workflows/build_and_publish_images.yml=:
    #+begin_src yaml
    strategy:
      matrix:

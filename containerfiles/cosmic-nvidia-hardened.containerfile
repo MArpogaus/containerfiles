@@ -4,13 +4,13 @@ FROM scratch AS ctx
 COPY silverblue-main-hardened /
 
 # Base Image
-FROM ghcr.io/secureblue/silverblue-nvidia-hardened:latest
+FROM ghcr.io/secureblue/cosmic-nvidia-hardened:latest
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    EXTRA_PACKAGES=gnome-remote-desktop /ctx/build.sh && \
+    /ctx/build.sh && \
     ostree container commit
 
 ### LINTING

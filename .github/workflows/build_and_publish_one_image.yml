@@ -17,10 +17,10 @@ on:
       platform:
         type: string
         required: true
-      slsa-verify:
-        type: boolean
+      slsa-verify-source:
+        type: string
         required: false
-        default: false
+        default: ''
     secrets:
       SIGNING_SECRET:
         required: true
@@ -68,13 +68,14 @@ jobs:
 
       # Verify base image provenance
     - name: Install slsa-verifier
-      if: ${{ inputs.slsa-verify }}
+      if: ${{ inputs.slsa-verify-source != '' }}
       uses: slsa-framework/slsa-verifier/actions/installer@v2.7.1
     - name: Verify base image provenance
       shell: bash
-      if: ${{ inputs.slsa-verify }}
+      if: ${{ inputs.slsa-verify-source != '' }}
       env:
         CONTAINERFILE: ${{ inputs.containerfile }}
+        SOURCE_URI: ${{ inputs.slsa-verify-source }}
       run: |
         set -exuo pipefail
 
@@ -88,9 +89,9 @@ jobs:
         slsa-verifier verify-artifact go-containerregistry.tar.gz --provenance-path provenance.intoto.jsonl --source-uri github.com/google/go-containerregistry --source-tag "${CRANE_VERSION}"
         tar -zxvf go-containerregistry.tar.gz -C /usr/local/bin/ crane
 
-        BASE_IMAGE=$(grep '^FROM ghcr.io/secureblue' ${CONTAINERFILE} | cut -d ' ' -f 2)
+        BASE_IMAGE=${BASE_IMAGE:-$(grep -P '^FROM ([a-z.-]+(/|:\w+))+' ${CONTAINERFILE} | cut -d ' ' -f 2)}
         DIGEST=$(crane digest "${BASE_IMAGE}")
-        slsa-verifier verify-image --source-uri 'github.com/secureblue/secureblue' "${BASE_IMAGE}@${DIGEST}"
+        slsa-verifier verify-image --source-uri $SOURCE_URI "${BASE_IMAGE}@${DIGEST}"
 
       # Enable caching for podman
     - name: cache podman

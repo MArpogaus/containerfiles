@@ -80,6 +80,6 @@ jobs:
       containerfile: ./containerfiles/${{ matrix.image-name }}.containerfile
       context: ./context
       platform: ${{ matrix.platform }}
-      slsa-verify: true
+      slsa-verify-source: github.com/secureblue/secureblue
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}

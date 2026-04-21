@@ -29,12 +29,12 @@ jobs:
       # https://github.com/macbre/push-to-ghcr/issues/12
     - name: Lowercase Registry
       id: registry_case
-      uses: ASzc/change-string-case-action@v8
+      uses: ASzc/change-string-case-action@ecd1412d078f2e06e9eedcbaa6fcd988151c3f82 # v8
       with:
         string: ${{ env.REGISTRY }}
 
     - name: Maximize build space
-      uses: jlumbroso/free-disk-space@v1.3.1
+      uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
       with:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
@@ -50,7 +50,7 @@ jobs:
         swap-storage: true
 
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
 
@@ -96,7 +96,7 @@ jobs:
         echo "output-directory=${TARGET_OUTPUT_DIRECTORY}" >> ${GITHUB_OUTPUT}
 
     - name: Upload ISO and Checksum to Job Artifacts
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       with:
         path: ${{ steps.rename.outputs.output-directory }}
         name: ${{ matrix.image }}

@@ -112,8 +112,8 @@ jobs:
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
           type=raw,value=latest,enable={{is_default_branch}}
-          type=raw,value={{branch}}-{{sha}}
-          type=raw,value={{branch}}-{{date 'YYYYMMDD-HHmmss'}}
+          type=raw,value={{branch}}-{{sha}},enable=${{ github.event_name != 'pull_request' }}
+          type=raw,value={{branch}}-{{date 'YYYYMMDD-HHmmss'}},enable=${{ github.event_name != 'pull_request' }}
     - name: Build Image
       id: build_image
       uses: redhat-actions/buildah-build@v2
